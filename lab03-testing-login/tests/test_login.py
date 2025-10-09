@@ -26,7 +26,6 @@ def open_login(drv):
     WebDriverWait(drv, 5).until(EC.presence_of_element_located((By.ID, "loginForm")))
 
 def submit_form(drv):
-    # Ưu tiên click nút, nếu không có thì submit form
     btns = drv.find_elements(By.CSS_SELECTOR, "#btnLogin, [data-testid='btn-login'], button[type='submit']")
     if btns:
         btns[0].click()
@@ -34,7 +33,6 @@ def submit_form(drv):
         drv.find_element(By.ID, "loginForm").submit()
 
 def read_alert_or_status(drv):
-    # 1) alert()
     try:
         alert = WebDriverWait(drv, 2).until(EC.alert_is_present())
         txt = alert.text
@@ -42,14 +40,12 @@ def read_alert_or_status(drv):
         return txt
     except Exception:
         pass
-    # 2) #status / data-testid=notice nếu có
     for css in ("#status", "[data-testid='notice']", ".status"):
         els = drv.find_elements(By.CSS_SELECTOR, css)
         if els:
             return els[0].text
     return ""
 
-# ---------- TESTS (đúng yêu cầu đề) ----------
 
 def test_login_success():
     d = setup_driver()
@@ -80,10 +76,8 @@ def test_empty_fields_show_errors():
     try:
         open_login(d)
         submit_form(d)
-        # Lỗi phải hiện cho cả email và password
         err_email = d.find_element(By.CSS_SELECTOR, "#err-email, #err-username, [data-testid='err-username']")
         err_pw    = d.find_element(By.CSS_SELECTOR, "#err-password, [data-testid='err-password']")
-        # kiểm tra hiển thị (display:block) hoặc có text
         disp_email = err_email.value_of_css_property("display")
         disp_pw    = err_pw.value_of_css_property("display")
         assert disp_email == "block" or err_email.text.strip() != ""
@@ -126,3 +120,4 @@ def test_social_buttons_clickable(css, keyword):
         assert keyword in msg
     finally:
         d.quit()
+
