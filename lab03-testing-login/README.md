@@ -69,11 +69,9 @@ pip install -r requirements.txt
 
 ### 2) Cấu hình đường dẫn HTML trong `tests/test_login.py`
 ```python
-# Cách an toàn (tạo URI file:// từ đường dẫn tuyệt đối)
 from pathlib import Path
 LOGIN_HTML = Path(r"D:\hoc\NMCNPM\lab03-testing-login\Login\Login.html").resolve().as_uri()
 
-# Tuỳ chọn: chạy ẩn trình duyệt
 HEADLESS = False  # True nếu muốn headless (CI nhanh hơn)
 ```
 
